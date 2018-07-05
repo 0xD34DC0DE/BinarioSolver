@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import warnings
 
-
-def show_puzzle(puzzle: np.array):
+def show_puzzle(puzzle: np.array, display_now='yes'):
     fig, ax = plt.subplots()
 
     for (i, j), z in np.ndenumerate(puzzle):
@@ -34,4 +34,7 @@ def show_puzzle(puzzle: np.array):
     ax.xaxis.set_major_formatter(ticker.FixedFormatter(char_array))
     ax.yaxis.set_major_formatter(ticker.FixedFormatter(char_array))
 
-    plt.show()
+    if display_now == 'yes':
+        plt.show()
+    elif display_now != 'no':
+        warnings.warn("display_now should be set to 'yes' or 'no' only", RuntimeWarning, stacklevel=2)
