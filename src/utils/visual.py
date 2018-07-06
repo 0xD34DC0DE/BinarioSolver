@@ -1,10 +1,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-import warnings
+
+images = []
 
 
-def show_puzzle(puzzle: np.array, display_now='yes'):
+def get_image(index: int):
+    return images[index]
+
+
+def get_global_images():
+    global images
+    return images
+
+def process_plot_event():
+    plt.pause(0)
+
+
+def close_all_plots():
+    plt.close()
+
+
+def generate_puzzle_image(puzzle: np.array):
+    global images
     plt.rcParams["figure.figsize"] = (2, 2)
     fig, ax = plt.subplots()
 
@@ -36,9 +54,22 @@ def show_puzzle(puzzle: np.array, display_now='yes'):
     ax.xaxis.set_major_formatter(ticker.FixedFormatter(char_array))
     ax.yaxis.set_major_formatter(ticker.FixedFormatter(char_array))
 
+    images.append(fig2data(fig))
 
 
-    if display_now == 'yes':
-        plt.show()
-    elif display_now != 'no':
-        warnings.warn("display_now should be set to 'yes' or 'no' only", RuntimeWarning, stacklevel=2)
+def fig2data(fig):
+    """
+    @brief Convert a Matplotlib figure to a 4D numpy array with RGBA channels and return it
+    @param fig a matplotlib figure
+    @return a numpy 3D array of RGBA values
+    """
+    # draw the renderer
+    fig.canvas.draw()
+
+    # Get the RGBA buffer from the figure
+    w, h = fig.canvas.get_width_height()
+    buf = np.fromstring(fig.canvas.tostring_argb(), dtype=np.uint8)
+    buf.shape = (w, h, 4)
+    # ARGB to BGRA
+    buf = buf[:, :, [3, 2, 1, 0]]
+    return buf
