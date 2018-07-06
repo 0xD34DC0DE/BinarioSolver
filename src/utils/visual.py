@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import warnings
 
+
 def show_puzzle(puzzle: np.array, display_now='yes'):
+    plt.rcParams["figure.figsize"] = (2, 2)
     fig, ax = plt.subplots()
 
     for (i, j), z in np.ndenumerate(puzzle):
@@ -33,6 +35,8 @@ def show_puzzle(puzzle: np.array, display_now='yes'):
     # Set major axis labels
     ax.xaxis.set_major_formatter(ticker.FixedFormatter(char_array))
     ax.yaxis.set_major_formatter(ticker.FixedFormatter(char_array))
+
+
 
     if display_now == 'yes':
         plt.show()
